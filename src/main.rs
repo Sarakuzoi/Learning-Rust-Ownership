@@ -24,7 +24,6 @@ fn main() {
     //We cannot have more than one mutable reference in the same scope
     {
         let tmp_r3: &mut String = &mut s1;
-        change(tmp_r3);
         println!("tmp_r3: {}", tmp_r3);
     }
     //tmp_r3 is now out of scope and dropped
@@ -33,6 +32,12 @@ fn main() {
 
     println!("r3: {}", r3);
     //r3 is now out of scope, and also dropped
+
+    //String slices are references to parts of strings, as shown below:
+    let s: String = String::from("learning rust");
+    let learning = &s[..8];
+    let rust = &s[9..13];
+    println!("Currently {} {}", learning, rust);
 }
 
 //With a mutable reference, it is clear that the "change"
@@ -50,11 +55,11 @@ fn calculate_length(s: &String) -> usize {
 //It is also important not to let through dangling pointers,
 //so the compiler makes sure such behaviour does not appear.
 //Thus, the following code will not run:
-// fn dangle() -> &String {
-//     let s = String::from("hello");
+/// fn dangle() -> &String {
+///    let s = String::from("hello");
 
-//     &s
-// }
+///     &s
+/// }
 //Here s goes out of scope, yet we will still have a reference
 //to the now dropped memory. Thus, the following function is favored:
 fn _no_dangle() -> String {
